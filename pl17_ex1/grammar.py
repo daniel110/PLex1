@@ -328,21 +328,42 @@ def analyze_grammar(grammar):
 
 
 grammar_json_4a = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.a ---
-    #
+    (obj, (LB,RB)),              # obj -> {}
+    (obj, (LB,members,RB)),  # obj -> {members}
+    (members, (keyvalue)),                      # members -> keyvalue
+    (members, (members,COMMA,members)),                        # members -> members, members
+    (keyvalue, (STRING,COLON,value)),                  # keyvalue -> string : value
+    (value, (STRING)),                          # value -> string
+    (value, (INT)),                   # value -> int
+     (value, (obj)),                     # value -> obj
 ]
 
 grammar_json_4b = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.b ---
-    #
+    (obj, (LB,RB)),          # obj -> {}
+    (obj, (LB,members,RB)),  # obj -> {members}
+    (members, (keyvalue)),                      # members -> keyvalue
+    (members, (members,COMMA,T)),               # members -> members, T
+    (T, (members)),                                     # T-> members
+    (keyvalue, (STRING,COLON,value)),                  # keyvalue -> string : value
+    (value, (STRING)),                          # value -> string
+    (value, (INT)),                   # value -> int
+     (value, (obj)),                     # value -> obj
+
 ]
 
 grammar_json_4c = [
-    #
-    # --- FILL IN HERE IN QUESTION 5.c ---
-    #
+    (obj, (LB,E,RB)),           # obj -> {E}
+    (E, (members)),             # E -> members
+    (E, ()),                    # E -> epsilon
+    (members, (keyvalue,MembersTag)),                      # members -> keyvalueMembersTag
+    (MembersTag, (COMMA,T,MembersTag)),                    # MembersTag -> , TMembersTag
+    (MembersTag, ()),                                      # MembersTag -> epsilon
+    (T, (members)),                                     # T-> members
+    (keyvalue, (STRING,COLON,value)),                  # keyvalue -> string : value
+    (value, (STRING)),                          # value -> string
+    (value, (INT)),                   # value -> int
+     (value, (obj)),                     # value -> obj
+
 ]
 
 grammar_json__6 = [
@@ -360,12 +381,12 @@ def main():
     #
     # --- UNCOMMENT THE FOLLOWING LINES AS YOU PROCEED ---
     #
-    # analyze_grammar(grammar_json_4a)
-    # print
-    # analyze_grammar(grammar_json_4b)
-    # print
-    # analyze_grammar(grammar_json_4c)
-    # print
+    analyze_grammar(grammar_json_4a)
+    print
+    analyze_grammar(grammar_json_4b)
+    print
+    analyze_grammar(grammar_json_4c)
+    print
     # analyze_grammar(grammar_json_6)
     # print
 

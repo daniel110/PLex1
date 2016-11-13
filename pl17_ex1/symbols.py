@@ -21,7 +21,7 @@ S = 'S'
 E = 'E'
 T = 'T'
 EP = 'EP'
-
+MembersTag = 'MembersTag'
 
 # terminals for JSON
 LB = 'LB'          # {
