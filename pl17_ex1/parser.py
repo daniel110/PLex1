@@ -5,6 +5,8 @@ This file contains the JSON parser.
 from symbols import *
 
 
+
+
 class SyntaxError(Exception):
     pass
 
