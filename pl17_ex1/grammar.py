@@ -385,7 +385,7 @@ def main():
     print
     analyze_grammar(grammar_json_4c)
     print
-    # analyze_grammar(grammar_json_6)
+    # analyze_grammar(grammar_json__6)
     # print
 
     #
