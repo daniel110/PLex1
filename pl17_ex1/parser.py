@@ -98,13 +98,103 @@ class JsonParser(Parser):
         #
         # --- CHANGE THE BODY OF THIS FUNCTION ---
         #
-        pass
-
+        """
+        Parses the obj non-terminal according to its production rule and its select set:
+        obj -> LB E RB  (select set: {LB})
+        """
+        if self.t == LB:
+            c1 = self.match(LB)
+            c2 = self.parse_E()
+            c3 = self.match(RB)
+            return (obj, (c1, c2, c3))
+        else:
+            raise SyntaxError("Syntax error: no rule for token: {}".format(self.t))
+        
     #
     # --- FILL IN MORE parse_XXX FUNCTIONS HERE ---
     #
 
+    def parse_E(self):
+        """
+        Parses the E non-terminal according to its production rules and their select sets:
+        E -> members (select set: {STRING})
+        E -> epsilon (select set: {RB})
+        """
+        if self.t == STRING:
+            # Applying the rule E -> members
+            c1 = self.parse_members()
+            return (E, (c1,))
+        elif self.t == RB:
+            # Applying the rule E -> epsilon
+            return (E, ())
+        else:
+            raise SyntaxError("Syntax error: no rule for token: {}".format(self.t))
+        
+    def parse_members(self):
+        """
+        Parses the members non-terminal according to its production rule and its select set:
+        members -> keyvalue MembersTag  (select set: {STRING})
+        """
+        if self.t == STRING:
+            # Applying the rule members -> keyvalue MembersTag
+            c1 = self.parse_keyvalue()
+            c2 = self.parse_MembersTag()
+            return (members, (c1, c2))
+        else:
+            raise SyntaxError("Syntax error: no rule for token: {}".format(self.t))
 
+    def parse_MembersTag(self):
+        """
+        Parses the MembersTag non-terminal according to its production rules and their select sets:
+        MembersTag -> COMMA keyvalue MembersTag (select set: {COMMA})
+        MembersTag -> epsilon                   (select set: {RB})
+        """
+        if self.t == COMMA:
+            # Applying the rule MembersTag -> COMMA keyvalue MembersTag
+            c1 = self.match(COMMA)
+            c2 = self.parse_keyvalue()
+            c3 = self.parse_MembersTag()
+            return (MembersTag, (c1, c2, c3))
+        elif self.t == RB:
+            # Applying the rule MembersTag -> epsilon
+            return (MembersTag, ())
+        else:
+            raise SyntaxError("Syntax error: no rule for token: {}".format(self.t))
+        
+    def parse_value(self):
+        """
+        Parses the value non-terminal according to its production rules and their select sets:
+        value -> STRING (select set: {STRING})
+        value -> INT (select set: {INT})
+        value -> obj (select set: {LB})
+        """
+        if self.t == STRING:
+            # Applying the rule value -> STRING
+            c1 = self.match(STRING)
+            return (value, (c1,))
+        elif self.t == INT:
+            # Applying the rule value -> INT
+            c1 = self.match(INT)
+            return (value, (c1,))
+        elif self.t == LB:
+            # Applying the rule value -> obj
+            c1 = self.parse_obj()
+            return (value, (c1,))
+        else:
+            raise SyntaxError("Syntax error: no rule for token: {}".format(self.t))
+
+def create_tree(input_file_name, output_file_name):
+    from lexer import lex
+    from tree_to_dot import tree_to_dot, view
+    
+    json_example = open(input_file_name).read()
+    print json_example
+    tokens = lex(json_example)
+    parser = JsonParser(tokens)
+    parse_tree = parser.parse()
+    dot = tree_to_dot(parse_tree)
+    open(output_file_name, 'w').write(dot)
+            
 def main():
     from lexer import lex
     from tree_to_dot import tree_to_dot, view
@@ -121,7 +211,9 @@ def main():
     #
     # --- MODIFY HERE TO ADD MORE TEST CASES ---
     #
-
+    
+    # Uncomment the following line in order to check the syntax exception.
+    # create_tree('json_bad_example.json', 'json_bad_example.gv')
 
 if __name__ == '__main__':
     main()
