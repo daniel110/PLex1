@@ -1,0 +1,187 @@
+Analyzing grammar:
+    S -> ID ASSIGN E
+    S -> IF LP E RP S ELSE S
+    E -> T EP
+    T -> ID
+    T -> LP E RP
+    EP -> 
+    EP -> PLUS E
+
+terminals =  set(['RP', 'ASSIGN', 'PLUS', 'LP', 'ELSE', 'ID', 'IF'])
+nonterminals =  set(['S', 'E', 'T', 'EP'])
+
+nullable =  set(['EP'])
+
+first(ASSIGN) = set(['ASSIGN'])
+first(E) = set(['ID', 'LP'])
+first(ELSE) = set(['ELSE'])
+first(EP) = set(['PLUS'])
+first(ID) = set(['ID'])
+first(IF) = set(['IF'])
+first(LP) = set(['LP'])
+first(PLUS) = set(['PLUS'])
+first(RP) = set(['RP'])
+first(S) = set(['ID', 'IF'])
+first(T) = set(['ID', 'LP'])
+
+follow(E) = set(['RP', 'EOF', 'ELSE'])
+follow(EP) = set(['RP', 'EOF', 'ELSE'])
+follow(S) = set(['EOF', 'ELSE'])
+follow(T) = set(['PLUS', 'RP', 'EOF', 'ELSE'])
+
+select(E -> T EP) = set(['ID', 'LP'])
+select(EP -> ) = set(['RP', 'EOF', 'ELSE'])
+select(EP -> PLUS E) = set(['PLUS'])
+select(S -> ID ASSIGN E) = set(['ID'])
+select(S -> IF LP E RP S ELSE S) = set(['IF'])
+select(T -> ID) = set(['ID'])
+select(T -> LP E RP) = set(['LP'])
+
+Grammar is LL(1).
+
+
+Analyzing grammar:
+    obj -> LB RB
+    obj -> LB members RB
+    members -> keyvalue
+    members -> members COMMA members
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COLON', 'RB', 'COMMA'])
+nonterminals =  set(['keyvalue', 'obj', 'value', 'members'])
+
+nullable =  set([])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(keyvalue) = set(['COMMA', 'RB'])
+follow(members) = set(['COMMA', 'RB'])
+follow(obj) = set(['COMMA', 'EOF', 'RB'])
+follow(value) = set(['COMMA', 'RB'])
+
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(members -> keyvalue) = set(['STRING'])
+select(members -> members COMMA members) = set(['STRING'])
+select(obj -> LB RB) = set(['LB'])
+select(obj -> LB members RB) = set(['LB'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    obj -> LB RB
+    obj -> LB members RB
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    members -> keyvalue
+    members -> members COMMA members
+
+
+Analyzing grammar:
+    obj -> LB RB
+    obj -> LB members RB
+    members -> keyvalue
+    members -> members COMMA keyvalue
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COLON', 'RB', 'COMMA'])
+nonterminals =  set(['keyvalue', 'obj', 'value', 'members'])
+
+nullable =  set([])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(keyvalue) = set(['COMMA', 'RB'])
+follow(members) = set(['COMMA', 'RB'])
+follow(obj) = set(['COMMA', 'EOF', 'RB'])
+follow(value) = set(['COMMA', 'RB'])
+
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(members -> keyvalue) = set(['STRING'])
+select(members -> members COMMA keyvalue) = set(['STRING'])
+select(obj -> LB RB) = set(['LB'])
+select(obj -> LB members RB) = set(['LB'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    obj -> LB RB
+    obj -> LB members RB
+Grammar is not LL(1), as the following rules have intersecting SELECT sets:
+    members -> keyvalue
+    members -> members COMMA keyvalue
+
+
+Analyzing grammar:
+    obj -> LB E RB
+    E -> members
+    E -> 
+    members -> keyvalue MembersTag
+    MembersTag -> COMMA keyvalue MembersTag
+    MembersTag -> 
+    keyvalue -> STRING COLON value
+    value -> STRING
+    value -> INT
+    value -> obj
+
+terminals =  set(['LB', 'STRING', 'INT', 'COMMA', 'RB', 'COLON'])
+nonterminals =  set(['E', 'value', 'MembersTag', 'keyvalue', 'members', 'obj'])
+
+nullable =  set(['MembersTag', 'E'])
+
+first(COLON) = set(['COLON'])
+first(COMMA) = set(['COMMA'])
+first(E) = set(['STRING'])
+first(INT) = set(['INT'])
+first(LB) = set(['LB'])
+first(MembersTag) = set(['COMMA'])
+first(RB) = set(['RB'])
+first(STRING) = set(['STRING'])
+first(keyvalue) = set(['STRING'])
+first(members) = set(['STRING'])
+first(obj) = set(['LB'])
+first(value) = set(['INT', 'LB', 'STRING'])
+
+follow(E) = set(['RB'])
+follow(MembersTag) = set(['RB'])
+follow(keyvalue) = set(['COMMA', 'RB'])
+follow(members) = set(['RB'])
+follow(obj) = set(['COMMA', 'EOF', 'RB'])
+follow(value) = set(['COMMA', 'RB'])
+
+select(E -> ) = set(['RB'])
+select(E -> members) = set(['STRING'])
+select(MembersTag -> ) = set(['RB'])
+select(MembersTag -> COMMA keyvalue MembersTag) = set(['COMMA'])
+select(keyvalue -> STRING COLON value) = set(['STRING'])
+select(members -> keyvalue MembersTag) = set(['STRING'])
+select(obj -> LB E RB) = set(['LB'])
+select(value -> INT) = set(['INT'])
+select(value -> STRING) = set(['STRING'])
+select(value -> obj) = set(['LB'])
+
+Grammar is LL(1).
